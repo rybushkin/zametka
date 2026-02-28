@@ -28,7 +28,6 @@ export default function QuizPage() {
   const [screen, setScreen] = useState<Screen>("cover");
   const [answers, setAnswers] = useState<Answers>({});
   const [sealedNote, setSealedNote] = useState("");
-  const [noteSealed, setNoteSealed] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [routeView, setRouteView] = useState<"main" | "other">("main");
 
@@ -96,11 +95,6 @@ export default function QuizPage() {
     [setAnswer]
   );
 
-  const handleSealNote = () => {
-    setNoteSealed(true);
-    setToast("Noted. Filed under: good ideas.");
-  };
-
   // ---- Cover (whole image clickable, no separate button) ----
   if (screen === "cover") {
     return (
@@ -132,7 +126,7 @@ export default function QuizPage() {
             width: "100%",
             height: "100%",
             maxHeight: "100%",
-            objectFit: "cover",
+            objectFit: "contain",
             objectPosition: "center",
             display: "block",
           }}
@@ -209,11 +203,9 @@ export default function QuizPage() {
     );
   }
 
-  // ---- Q9 Sealed note (input + 4 style options) ----
+  // ---- Q9 Sealed note (input + footer) ----
   if (screen === "q9") {
     const q = QUESTIONS[9];
-    const styleSelected = answers[9];
-    const canSeal = styleSelected !== undefined;
     return (
       <ScreenLayout
         footer={
@@ -223,20 +215,9 @@ export default function QuizPage() {
               <button type="button" onClick={goBack} className="z-btn z-btnGhost">
                 Back
               </button>
-              {!noteSealed ? (
-                <button
-                  type="button"
-                  onClick={handleSealNote}
-                  disabled={!canSeal}
-                  className="z-btn z-btnPrimary"
-                >
-                  Seal the note
-                </button>
-              ) : (
-                <button type="button" onClick={goNext} className="z-btn z-btnPrimary">
-                  Next
-                </button>
-              )}
+              <button type="button" onClick={goNext} className="z-btn z-btnPrimary">
+                Next
+              </button>
             </div>
           </div>
         }
@@ -256,30 +237,20 @@ export default function QuizPage() {
             <h2 className="z-title z-title--question" style={{ marginBottom: "var(--gap-1)" }}>{q.title}</h2>
             <p className="z-helper" style={{ marginBottom: "var(--gap-2)" }}>{q.helper}</p>
             <div className="z-noteWrap">
-              <input
-                type="text"
+              <textarea
                 value={sealedNote}
                 onChange={(e) =>
                   setSealedNote(e.target.value.slice(0, Q9_MAX_LENGTH))
                 }
+                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && goNext()}
                 placeholder={Q9_PLACEHOLDER}
                 maxLength={Q9_MAX_LENGTH}
-                disabled={noteSealed}
+                rows={4}
                 className="z-noteInput"
               />
               <p style={{ marginTop: 6, fontSize: 12, color: "rgba(26,36,51,0.6)" }}>
                 {sealedNote.length}/{Q9_MAX_LENGTH}
               </p>
-            </div>
-            <div className="z-options">
-              {q.options?.map((opt, i) => (
-                <OptionButton
-                  key={i}
-                  label={opt}
-                  selected={styleSelected === i}
-                  onSelect={() => setAnswer(9, i)}
-                />
-              ))}
             </div>
           </div>
         </div>

@@ -84,13 +84,8 @@ export const QUESTIONS: Record<
   },
   9: {
     title: "Leave a note for Future You",
-    helper: "One sentence. Then choose how it should look.",
-    options: [
-      "Clean (minimal)",
-      "Messy (marker scribble)",
-      "Cute (stickers everywhere)",
-      "Confidential (stamped \"SEALED\")",
-    ],
+    helper: "One sentence.",
+    options: [],
   },
   10: {
     title: "Final boss: quantum question",

@@ -264,13 +264,16 @@ button, input{ font-family: inherit; }
 
 .z-noteInput{
   width: 100%;
+  min-height: 120px;
   padding: 14px;
   border-radius: 18px;
   border: 1px solid var(--line-weak);
   background: rgba(255,255,255,0.42);
   color: var(--navy-ink);
   font-size: 16px;
+  line-height: 1.5;
   outline: none;
+  resize: vertical;
   transition: border-color var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease);
 }
 
